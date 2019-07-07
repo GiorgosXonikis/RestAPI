@@ -16,7 +16,7 @@
 #
     git clone <project path>
 - Open it in PyCharm
-- Create a .gitignore file and exclude what you need to from git -->
+- Create a .gitignore file and exclude what you need to from git
 #
     .idea
     __pycache__
@@ -96,7 +96,7 @@
     docker build -t <image name>:latest .
 
 ##### to remove an image
-    docker rm <image name>
+    docker rmi <image name>
 ##### or to force remove
     docker rmi -f <image name>
 
@@ -163,7 +163,7 @@
     ]
 
 
-### 13. Create a model at <app name> / models
+### 13. Create a model
 ##### example:
     class Post(models.Model):
         title = models.CharField(max_length=200)
