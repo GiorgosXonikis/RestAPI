@@ -1,0 +1,15 @@
+name: django
+dependencies:
+  - python=3.6
+  - psycopg2=2.7.4
+  - pip:
+      - django==2.2.2
+      - flake8
+      # Django Rest Framework packages
+      - djangorestframework
+      - markdown       # Markdown support for the browsable API.
+      - django-filter  # Filtering support
+      - django-rest-auth
+      - requests
+      - django-allauth
+      - pillow
