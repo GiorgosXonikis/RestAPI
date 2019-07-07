@@ -32,6 +32,12 @@ RestAPI for a Social Media website using Django's Rest Framework and Docker
 ```/api/posts/likes/ ```
 
 ### 3. Users
+- GET: Get all the users 
+```/api/users/```
+- GET: Get all the users  profiles
+```/api/users/profiles/```
+- GET: Get specific user profile 
+```/api/users/<int:pk>/```
 - POST: follow a user 
 ```/api/users/follow/<int:user_id>/``` 
 - DELETE: unfollow a user 
@@ -40,12 +46,8 @@ RestAPI for a Social Media website using Django's Rest Framework and Docker
 ```/api/users/followers/``` 
 - GET: List of all the people the user is following 
 ```/api/users/following/``` 
-- GET: Get all the users 
-```/api/users/``` 
-- GET: Get specific user profile 
-```/api/users/<int:user_id>/``` 
 - POST: Send friend request to another user 
-```/api/users/friendrequests/<int:user_id>/``` 
+```/api/users/friendrequest/<int:user_id>/``` 
 - GET: List all open friend requests from others 
 ```/api/users/friendrequests/``` 
 - GET: List all the logged in user’s pending friend requests 

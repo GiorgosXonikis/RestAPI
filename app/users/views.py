@@ -41,27 +41,6 @@ class UserProfilesView(generics.ListAPIView):
     permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
 
 
-class UserFollowersView(generics.ListAPIView):
-    """
-    Class to List all User's Followers
-    """
-
-    serializer_class = UserProfileSerializer
-
-    def get_queryset(self):
-        # get the followers of the loged-in user --> request.user
-        followers = Follow.objects.filter(Q(receiver=self.request.user) & Q(status='Follow'))
-        # serialize the data
-        serializer = FollowSerializer(followers, many=True)
-        # create a list with their id's
-        sender_id = [follower['sender'] for follower in serializer.data]
-
-        # query --> SELECT * FROM post WHERE author IN sender_id
-        queryset = UserProfile.objects.filter(Q(id__in=sender_id))
-
-        return queryset
-
-
 class UserProfileView(APIView):
     """
     Class to Retrieve a User Profile using the user_id
@@ -76,71 +55,7 @@ class UserProfileView(APIView):
         return Response(serializer.data)
 
 
-class UserFriendsView(generics.ListAPIView):
-    """
-    Class to List all User's Friends
-    """
-
-    serializer_class = UserProfileSerializer
-
-    def get_queryset(self):
-        # get the user_id of the current user
-        current_user_id = self.request.user.id
-        # get the followers of the loged-in user --> request.user
-        friends = Friendship.objects.filter((Q(receiver=self.request.user) & Q(status='Accept'))
-                                            | Q(sender=self.request.user) & Q(status='Accept'))
-        # serialize the data
-        serializer = FriendshipSerializer(friends, many=True)
-        # create a list with their id's
-        sender_id = [friend['sender'] for friend in serializer.data if friend['sender'] != current_user_id]
-        receiver_id = [friend['receiver'] for friend in serializer.data if friend['receiver'] != current_user_id]
-
-        # query --> SELECT * FROM post WHERE author IN (sender_id or receiver_id)
-        queryset = UserProfile.objects.filter(Q(user__in=sender_id) | Q(user__in=receiver_id))
-
-        return queryset
-
-
-class UserUnfriendView(APIView):
-    """
-    Class to Unfriend a User
-    """
-    serializer_class = FriendshipSerializer
-
-    @staticmethod
-    def get_user(user_id):
-        user = get_object_or_404(User, pk=user_id)
-        return user
-
-    def delete(self, request, **kwargs):
-        user_id = kwargs.get('user_id')
-
-        # Query to check if the users are friends
-        is_friends1 = Friendship.objects.filter(Q(receiver=request.user) &
-                                      Q(sender=self.get_user(user_id)) &
-                                      Q(status='Accept'))
-        is_friends2 = Friendship.objects.filter(Q(sender=request.user) &
-                                      Q(receiver=self.get_user(user_id)) &
-                                      Q(status='Accept'))
-        # If they are friends
-        if is_friends1.exists() or is_friends2.exists():
-            # check who is the receiver
-            if request.user != self.get_user(user_id):
-                # If current user was the receiver of the friend request
-                Friendship.objects.filter(Q(receiver=request.user) &
-                                          Q(sender=self.get_user(user_id)) &
-                                          Q(status='Accept')).delete()
-
-                # If current user was the sender of the friend request
-                Friendship.objects.filter(Q(sender=request.user) &
-                                          Q(receiver=self.get_user(user_id)) &
-                                          Q(status='Accept')).delete()
-                # if they are friends --> unfriend
-                return Response({"Status 204": "Unfriend Successful"}, status=status.HTTP_204_NO_CONTENT)
-        return Response({"Status 404": "You are not friends!"}, status=status.HTTP_400_BAD_REQUEST)
-
-
-class UserFollowingView(APIView):
+class UserFollowView(APIView):
     """
     Class to Follow / Unfollow a User using the user_id
     """
@@ -164,6 +79,48 @@ class UserFollowingView(APIView):
             Follow.objects.filter(Q(sender=request.user) & Q(receiver=user_id)).delete()
             return Response({"Status 204": "Unfollow Successful"}, status=status.HTTP_204_NO_CONTENT)
         return Response({"Status 404": "Sender must be different than receiver"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class UserFollowersView(generics.ListAPIView):
+    """
+    Class to List all User's Followers
+    """
+
+    serializer_class = UserProfileSerializer
+
+    def get_queryset(self):
+        # get the followers of the loged-in user --> request.user
+        followers = Follow.objects.filter(Q(receiver=self.request.user) & Q(status='Follow'))
+        # serialize the data
+        serializer = FollowSerializer(followers, many=True)
+        # create a list with their id's
+        sender_id = [follower['sender'] for follower in serializer.data]
+
+        # query --> SELECT * FROM post WHERE author IN sender_id
+        queryset = UserProfile.objects.filter(Q(id__in=sender_id))
+
+        return queryset
+
+
+class UserFolloweesView(generics.ListAPIView):
+    """
+    Class to List all the User's Followees
+    """
+
+    serializer_class = UserProfileSerializer
+
+    def get_queryset(self):
+        # get the followees of the loged-in user --> request.user
+        followees = Follow.objects.filter(Q(sender=self.request.user) & Q(status='Follow'))
+        # serialize the data
+        serializer = FollowSerializer(followees, many=True)
+        # create a list with their id's
+        sender_id = [followee['sender'] for followee in serializer.data]
+
+        # query --> SELECT * FROM post WHERE author IN sender_id
+        queryset = UserProfile.objects.filter(Q(id__in=sender_id))
+
+        return queryset
 
 
 class FriendRequestView(APIView):
@@ -284,3 +241,67 @@ class FriendRequestRejectView(APIView):
                 return Response({"Status 201": "Friend Request Rejected"}, status=status.HTTP_201_CREATED)
             return Response({"Status 404": "Sender must be different than receiver"}, status=status.HTTP_400_BAD_REQUEST)
         return Response({"Status 404": "There is no pending friend request"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class UserFriendsView(generics.ListAPIView):
+    """
+    Class to List all User's Friends
+    """
+
+    serializer_class = UserProfileSerializer
+
+    def get_queryset(self):
+        # get the user_id of the current user
+        current_user_id = self.request.user.id
+        # get the followers of the loged-in user --> request.user
+        friends = Friendship.objects.filter((Q(receiver=self.request.user) & Q(status='Accept'))
+                                            | Q(sender=self.request.user) & Q(status='Accept'))
+        # serialize the data
+        serializer = FriendshipSerializer(friends, many=True)
+        # create a list with their id's
+        sender_id = [friend['sender'] for friend in serializer.data if friend['sender'] != current_user_id]
+        receiver_id = [friend['receiver'] for friend in serializer.data if friend['receiver'] != current_user_id]
+
+        # query --> SELECT * FROM post WHERE author IN (sender_id or receiver_id)
+        queryset = UserProfile.objects.filter(Q(user__in=sender_id) | Q(user__in=receiver_id))
+
+        return queryset
+
+
+class UserUnfriendView(APIView):
+    """
+    Class to Unfriend a User
+    """
+    serializer_class = FriendshipSerializer
+
+    @staticmethod
+    def get_user(user_id):
+        user = get_object_or_404(User, pk=user_id)
+        return user
+
+    def delete(self, request, **kwargs):
+        user_id = kwargs.get('user_id')
+
+        # Query to check if the users are friends
+        is_friends1 = Friendship.objects.filter(Q(receiver=request.user) &
+                                      Q(sender=self.get_user(user_id)) &
+                                      Q(status='Accept'))
+        is_friends2 = Friendship.objects.filter(Q(sender=request.user) &
+                                      Q(receiver=self.get_user(user_id)) &
+                                      Q(status='Accept'))
+        # If they are friends
+        if is_friends1.exists() or is_friends2.exists():
+            # check who is the receiver
+            if request.user != self.get_user(user_id):
+                # If current user was the receiver of the friend request
+                Friendship.objects.filter(Q(receiver=request.user) &
+                                          Q(sender=self.get_user(user_id)) &
+                                          Q(status='Accept')).delete()
+
+                # If current user was the sender of the friend request
+                Friendship.objects.filter(Q(sender=request.user) &
+                                          Q(receiver=self.get_user(user_id)) &
+                                          Q(status='Accept')).delete()
+                # if they are friends --> unfriend
+                return Response({"Status 204": "Unfriend Successful"}, status=status.HTTP_204_NO_CONTENT)
+        return Response({"Status 404": "You are not friends!"}, status=status.HTTP_400_BAD_REQUEST)
