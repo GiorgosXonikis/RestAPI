@@ -22,11 +22,11 @@ from django.conf import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-    path('feed/', include('feed.urls')),
-    path('posts/', include('posts.urls')),
-    path('users/', include('users.urls')),
-    path('me/', include('me.urls')),
-    path('register/', include('registration.urls')),
+    path('api/feed/', include('feed.urls')),
+    path('api/posts/', include('posts.urls')),
+    path('api/users/', include('users.urls')),
+    path('api/me/', include('me.urls')),
+    path('api/register/', include('registration.urls')),
 
     path("api-auth/", include("rest_framework.urls")),
     path("api/rest-auth/", include("rest_auth.urls")),
