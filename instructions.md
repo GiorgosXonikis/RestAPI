@@ -106,8 +106,9 @@ run.sh
 
 
 ### 9. Start django project
-- Inside the app folder
-- start the project --> django-admin startproject project .
+-Inside the app folder start the project -->
+#####
+    django-admin startproject project .
 - Go to settings.py and change the database -->
 #####
     DATABASES = {
@@ -121,26 +122,25 @@ run.sh
         }
     }
 
-
-##### To initialise a new database
+##### Initialise a new database
     python manage.py migrate
     python manage.py makemigrations
     python manage.py migrate
 
-##### create superuser to access admin -->
+##### Create superuser to access admin -->
     python manage.py createsuperuser
 
-##### to run the server -->
+##### Run the server -->
     python manage.py runserver 0.0.0.0:8000
 
-##### check the server visit -->
+##### Server -->
     http://localhost:8000
  
-##### check the admin page -->
+##### Admin's page -->
     http://localhost:8000/admin
 
 
-### 10. Connect to postgres from Pycharm
+### 10. Connect to Postgres from Pycharm
 ##### View - Tools window - Databases - Postgres -->
     localhost: postgres
     user: postgres
@@ -179,14 +179,12 @@ run.sh
     python manage.py makemigrations
     python manage.py migrate
 
-##### to list migrations -->
+##### List migrations -->
     python manage.py <app name> showmigrations
 
 
 ### 15. Check that the table has been created -->
-table name = <app name>_<model class name in lowercase>
-ex: blog_post
-
+    table name = <app name>_<model class name in lowercase>
 
 ### 16. If you want to give access to the admin,
 ##### Go to app directory / admin.py -->
@@ -211,12 +209,11 @@ ex: blog_post
     ]
     
     
-#################################################################
 
-
-### Create Django REST API ###
+## Create Django REST API ##
 
 ### 1. Install packages if not already in the requirements.yml -->
+##### Django Rest Framework (DRF)
     pip install djangorestframework
 
 ##### Markdown support for the browsable API
@@ -233,7 +230,7 @@ ex: blog_post
     )
 
 
-## 3. If you're intending to use the browsable API you'll probably also want to add REST framework's login and logout views.
+### 3. If you're intending to use the browsable API you'll probably also want to add REST framework's login and logout views.
 ##### Add the following to your root urls.py file -->
     urlpatterns = [
         ...
@@ -262,14 +259,16 @@ ex: blog_post
             fields = ['author', 'title', 'body', 'created_at']
     
 
-### 6. Create the Api View in <app name>/views.py
+### 6. Create the Api View in
+    <app name>/views.py
 
 
-### 7. Map the Api View in urls.py <app name>/urls.py
+### 7. Map the Api View in
+    urls.py <app name>/urls.py
 
 
 ### 8. Check that the app's urls are mapped in projects urls -->
-app/project/urls.py
+    app/project/urls.py
 
 ### Useful Docker commands
     docker-compose run --rm app sh -c "django-admin.py startproject app ."
