@@ -115,10 +115,10 @@ class UserFolloweesView(generics.ListAPIView):
         # serialize the data
         serializer = FollowSerializer(followees, many=True)
         # create a list with their id's
-        sender_id = [followee['sender'] for followee in serializer.data]
+        receiver_id = [followee['receiver'] for followee in serializer.data]
 
-        # query --> SELECT * FROM post WHERE author IN sender_id
-        queryset = UserProfile.objects.filter(Q(id__in=sender_id))
+        # query --> SELECT * FROM post WHERE author IN receiver_id
+        queryset = UserProfile.objects.filter(Q(id__in=receiver_id))
 
         return queryset
 

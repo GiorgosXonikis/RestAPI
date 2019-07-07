@@ -16,9 +16,13 @@ RestAPI for a Social Media website using Django's Rest Framework and Docker
 ```/api/feed/friends/ ```
 
 ### 2.Posts
+- POST: user can make a new post by sending post data 
+```/api/posts/new-post/ ```
 - GET: get a specific post by ID and display all the information about that post 
 ```/api/posts/<int:post_id>/ ```
 - PATCH: update a specific post (only allow owner of post or admin) 
+```/api/posts/<int:post_id>/ ```
+- PUT: update a specific post (only allow owner of post or admin) 
 ```/api/posts/<int:post_id>/ ```
 - DELETE: delete a post by ID (only allow owner of post or admin) 
 ```/api/posts/<int:post_id>/```
@@ -26,8 +30,6 @@ RestAPI for a Social Media website using Django's Rest Framework and Docker
 ```/api/posts/like/<int:post_id>/```
 - DELETE: remove like from a post 
 ```/api/posts/like/<int:post_id>/ ```
-- POST: user can make a new post by sending post data 
-```/api/posts/new-post/ ```
 - GET: the list of the posts the user likes 
 ```/api/posts/likes/ ```
 

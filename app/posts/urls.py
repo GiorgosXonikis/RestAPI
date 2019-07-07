@@ -5,10 +5,9 @@ from .views import (PostRetrieveUpdateDestroyView,
                     PostLikeAPIView)
 
 urlpatterns = [
+    path('liked/', PostsLikedAPIView.as_view(), name='liked-posts'),
     path('new-post/', PostCreateAPIView.as_view(), name='post-new'),
-    path('likes/', PostsLikedAPIView.as_view(), name='liked-posts'),
     path('<pk>/', PostRetrieveUpdateDestroyView.as_view(), name='post-retrieve-delete'),
     path('like/<post_id>', PostLikeAPIView.as_view(), name='like-unlike-post'),
-
 ]
 

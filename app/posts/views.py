@@ -25,7 +25,7 @@ class PostCreateAPIView(APIView):
         serializer = PostSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response({"Status 201": "Post created succesfully"},status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -49,7 +49,7 @@ class PostRetrieveUpdateDestroyView(APIView):
         serializer = PostSerializer(post, data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data)
+            return Response({"Status 201": "Post Updated succesfully"}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def put(self, request, pk):
@@ -57,25 +57,13 @@ class PostRetrieveUpdateDestroyView(APIView):
         serializer = PostSerializer(post, data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data)
+            return Response({"Status 201": "Post updated succesfully"}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk):
         post = self.get_object(pk)
         post.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
-
-class PostsLikedAPIView(generics.ListAPIView):
-    """
-    Class to get all the Posts that the user Liked
-    """
-
-    serializer_class = ReactionSerializer
-
-    def get_queryset(self):
-        queryset = Reaction.objects.filter(user_reacted=self.request.user)
-        return queryset
+        return Response({"Status 204": "Post deleted succesfully"}, status=status.HTTP_204_NO_CONTENT)
 
 
 class PostLikeAPIView(APIView):
@@ -97,9 +85,42 @@ class PostLikeAPIView(APIView):
         post_id = self.kwargs.get('post_id')
         post = Post.objects.get(id=post_id)
         Reaction.objects.get_or_create(user_reacted=self.request.user, posts=post, status=1)
-        return Response(status=status.HTTP_201_CREATED)
+        return Response({"Status 201": "Post liked succesfully"}, status=status.HTTP_201_CREATED)
 
     def delete(self, request, post_id):
         post_id = self.kwargs.get('post_id')
         Reaction.objects.filter(Q(user_reacted=self.request.user) & Q(posts=post_id)).delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response({"Status 204": "Post like deleted succesfully"}, status=status.HTTP_204_NO_CONTENT)
+
+
+# class PostsLikedAPIView(generics.ListAPIView):
+#     """
+#     Class to get all the Posts that the user Liked
+#     """
+#
+#     serializer_class = PostSerializer
+#
+#     def get_queryset(self):
+#         # get the liked posts of the loged-in user --> request.user
+#         liked_posts = Reaction.objects.filter(Q(user_reacted=self.request.user) & Q(status=1))
+#         # serialize the data
+#         serializer = ReactionSerializer(liked_posts, many=True)
+#         # create a list with the liked posts id's
+#         posts_id = [post['posts'] for post in serializer.data]
+#
+#         # query --> SELECT * FROM post WHERE author IN sender_id
+#         queryset = Post.objects.filter(Q(id__in=posts_id))
+#
+#         return queryset
+
+
+class PostsLikedAPIView(generics.ListAPIView):
+    """
+    Class to get all the Posts that the user Liked
+    """
+
+    serializer_class = ReactionSerializer
+
+    def get_queryset(self):
+        queryset = Reaction.objects.filter(user_reacted=self.request.user)
+        return queryset
