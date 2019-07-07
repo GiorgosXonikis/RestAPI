@@ -1,4 +1,4 @@
-### Create Django Project in Docker ###
+# Create Django Project in Docker ###
 
 ### 1. Create a directory <app> in the main project directory
 ##### tree -->
@@ -106,9 +106,10 @@ run.sh
 
 
 ### 9. Start django project
-##### 1. Inside the app folder
-##### 2. start the project --> django-admin startproject project .
-##### 3. Go to settings.py and change the database -->
+- Inside the app folder
+- start the project --> django-admin startproject project .
+- Go to settings.py and change the database -->
+#####
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -121,27 +122,26 @@ run.sh
     }
 
 
-##### Reset or start a new database
-##### to create the database -->
+##### To initialise a new database
     python manage.py migrate
     python manage.py makemigrations
     python manage.py migrate
 
-#####create superuser to access admin -->
+##### create superuser to access admin -->
     python manage.py createsuperuser
 
-#####to run the server -->
+##### to run the server -->
     python manage.py runserver 0.0.0.0:8000
 
 ##### check the server visit -->
     http://localhost:8000
  
-#####check the admin page -->
+##### check the admin page -->
     http://localhost:8000/admin
 
 
 ### 10. Connect to postgres from Pycharm
-#####View - Tools window - Databases - Postgres -->
+##### View - Tools window - Databases - Postgres -->
     localhost: postgres
     user: postgres
     password: postgres
