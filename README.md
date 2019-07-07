@@ -5,8 +5,9 @@ RestAPI for a Social Media website using Django's Rest Framework and Docker
 
 ### 1. Feed
 - GET: lists all the posts of all users in chronological order 
-/api/feed/
-- /api/feed/<int:user_id>/ GET: lists all the posts of a specific user in chronological order 
+```/api/feed/```
+- GET: lists all the posts of a specific user in chronological order 
+``` /api/feed/<int:user_id>/ ```
 - /api/feed/followees/ GET: lists all the posts of followed users in chronological order 
 - /api/feed/friends/ GET: lists all the posts of the logged in user’s friends in chronological order 
 
