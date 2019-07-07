@@ -1,4 +1,4 @@
-# Create Django Project in Docker ###
+# Create Django Rest API in Docker
 
 ### 1. Create a directory <app> in the main project directory
 ##### tree -->
@@ -10,22 +10,25 @@
         
         
 ### 2. Basic Setup
-- Create your project on gitlab
+- Create your project on ßGithub
 - Create a folder for the repo on local
-- Clone the project --> git clone <project path>
+- Clone the project
+#
+    git clone <project path>
 - Open it in PyCharm
 - Create a .gitignore file and exclude what you need to from git -->
-.idea
-__pycache__
-*.pyc
-.DS_Store
+#
+    .idea
+    __pycache__
+    *.pyc
+    .DS_Store
 
 
-### 3. Create a directory scripts and a script -->
-run.sh
+### 3. Create a directory scripts and a script
+    ./scripts/run.sh
 
 
-### 4.1 Create the requirements.yml file to update the environment of the container -->
+### 4.1 Create the requirements.yml file to update the environment of the container
     name: base
     dependencies:
     name: base
@@ -35,7 +38,7 @@ run.sh
       - pip:
           - django==2.2.2
           - flake8
-          ##### * Django Rest Framework packages *
+  #####  Django Rest Framework packages 
           - djangorestframework
           - markdown       # Markdown support for the browsable API.
           - django-filter  # Filtering support
@@ -46,8 +49,9 @@ run.sh
 
 
 ### 4.2 Create Dockerfile
-##### Go to docker hub and find the miniconda3 image
-##### Create a Dockerfile -->
+- Go to docker hub and find the miniconda3 image
+- Create a Dockerfile
+#
     FROM continuumio/miniconda3:4.5.12
     
     ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
@@ -65,7 +69,7 @@ run.sh
     WORKDIR /app
 
 
-### 5. Create a docker-compose.yml -->
+### 5. Create a docker-compose.yml
     version: '3'
     services:
       app:
@@ -88,28 +92,28 @@ run.sh
       django-project:
 
 
-### 6. Build the image -->
+### 6. Build the image
     docker build -t <image name>:latest .
 
-##### to remove an image -->
+##### to remove an image
     docker rm <image name>
-##### or -->
+##### or to force remove
     docker rmi -f <image name>
 
 
-### 7. Run the image to spin-up a new container -->
+### 7. Run the image to spin-up a new container
     docker-compose run --service-ports app bash
 
 
-### 8. If dependencies not in Dockerfile, Install django on container -->
+### 8. If dependencies not in Dockerfile, Install django on container
     pip install django
 
 
 ### 9. Start django project
--Inside the app folder start the project -->
+- Inside the app folder start the project
 #####
     django-admin startproject project .
-- Go to settings.py and change the database -->
+- Go to settings.py and change the database
 #####
     DATABASES = {
         'default': {
@@ -127,39 +131,39 @@ run.sh
     python manage.py makemigrations
     python manage.py migrate
 
-##### Create superuser to access admin -->
+##### Create superuser to access admin
     python manage.py createsuperuser
 
-##### Run the server -->
+##### Run the server
     python manage.py runserver 0.0.0.0:8000
 
-##### Server -->
+##### Server
     http://localhost:8000
  
-##### Admin's page -->
+##### Admin's page
     http://localhost:8000/admin
 
 
 ### 10. Connect to Postgres from Pycharm
-##### View - Tools window - Databases - Postgres -->
+##### View - Tools window - Databases - Postgres
     localhost: postgres
     user: postgres
     password: postgres
     port: 5432
 
 
-### 11. Create an app -->
+### 11. Create an app
     python manage.py startapp <app name>
 
 
-### 12. Add the app to the settings.py -->
+### 12. Add the app to the settings.py
     INSTALLED_APPS = [
         .....
         '<app name>',
     ]
 
 
-### 13. Create a model at <app name> / models -->
+### 13. Create a model at <app name> / models
 ##### example:
     class Post(models.Model):
         title = models.CharField(max_length=200)
@@ -175,33 +179,33 @@ run.sh
             return self.title
 
 
-### 14. Save the changes to the database -->
+### 14. Save the changes to the database
     python manage.py makemigrations
     python manage.py migrate
 
-##### List migrations -->
+##### List migrations
     python manage.py <app name> showmigrations
 
 
-### 15. Check that the table has been created -->
+### 15. Check that the table has been created
     table name = <app name>_<model class name in lowercase>
 
 ### 16. If you want to give access to the admin,
-##### Go to app directory / admin.py -->
+##### Go to app directory / admin.py
     admin.site.register(<model class name>)
 
 
 ### 17. Create the views inside the app / views.py
 
 
-### 18. Create a urls.py inside the app directory to include the app's views -->
+### 18. Create a urls.py inside the app directory to include the app's views
     <app name> / urls.py
     urlpatterns = [
         path('', view_all), # name='get-all-posts'
     ]
 
 
-### 19. Include in django's urls.py the path of the app's urls -->
+### 19. Include in django's urls.py the path of the app's urls
     <django project > / urls.py
     urlpatterns = [
         path('admin/', admin.site.urls),
@@ -212,7 +216,7 @@ run.sh
 
 ## Create Django REST API ##
 
-### 1. Install packages if not already in the requirements.yml -->
+### 1. Install packages if not already in the requirements.yml
 ##### Django Rest Framework (DRF)
     pip install djangorestframework
 
@@ -223,7 +227,7 @@ run.sh
     pip install django-filter  
 
 
-### 2. Add 'rest_framework' to your INSTALLED_APPS settings.py -->
+### 2. Add 'rest_framework' to your INSTALLED_APPS settings.py
     INSTALLED_APPS = (
         ...
         'rest_framework',
@@ -231,7 +235,7 @@ run.sh
 
 
 ### 3. If you're intending to use the browsable API you'll probably also want to add REST framework's login and logout views.
-##### Add the following to your root urls.py file -->
+##### Add the following to your root urls.py file
     urlpatterns = [
         ...
         path('api-auth/', include('rest_framework.urls')),
@@ -239,7 +243,7 @@ run.sh
 
 
 ### 4. Any global settings for a REST framework API are kept in a single configuration dictionary named REST_FRAMEWORK.
-##### Add the following to the settings.py module -->
+##### Add the following to the settings.py module
     REST_FRAMEWORK = {
         # Use Django's standard `django.contrib.auth` permissions,
         # or allow read-only access for unauthenticated users.
@@ -249,7 +253,7 @@ run.sh
     }
 
 
-### 5. Create a serializers.py in <app name> directory -->
+### 5. Create a serializers.py in <app name> directory
 ##### blog/serializers.py -->
     from rest_framework import serializers
     from .models import <Model class>
@@ -267,7 +271,7 @@ run.sh
     urls.py <app name>/urls.py
 
 
-### 8. Check that the app's urls are mapped in projects urls -->
+### 8. Check that the app's urls are mapped in projects urls
     app/project/urls.py
 
 ### Useful Docker commands
@@ -278,11 +282,11 @@ run.sh
 
 
 ### TIPS
-##### How to change the data's timezone ?? -->
+##### How to change the data's timezone ??
 use local time from python library
 
-##### What is the difference between Views and Generics.Views ?? -->
+##### What is the difference between Views and Generics.Views ??
 There are different classes, Generic has more packages
 
-##### What is: from django.contrib.auth import get_user_model ?? -->
+##### What is: from django.contrib.auth import get_user_model ?? 
 You import Django's User Table (<auth_user> in postgres)
