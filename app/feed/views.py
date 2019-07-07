@@ -21,7 +21,7 @@ class FeedView(generics.ListAPIView):
 class PostsView(generics.ListAPIView):
     """
     Class to get all Posts of a specific User using
-    the ID of the User (--> <author> in db)
+    the ID of the User (author)
     """
     serializer_class = FeedSerializer
 
@@ -54,7 +54,7 @@ class PostsFollowersView(generics.ListAPIView):
 
 class PostsFolloweesView(generics.ListAPIView):
     """
-    Class to get all the Posts of followers
+    Class to get all the Posts of followees
     """
 
     serializer_class = PostSerializer
