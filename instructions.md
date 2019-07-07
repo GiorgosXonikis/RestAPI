@@ -10,7 +10,7 @@
 
 
 ### 1. Create a directory <app> in the main project directory
-tree -->
+_tree -->_
     django-project
         - app
         -.gitignore
@@ -34,7 +34,7 @@ __pycache__
 run.sh
 
 
-###4.1 Create the requirements.yml file to update the environment of the container -->
+### 4.1 Create the requirements.yml file to update the environment of the container -->
 name: base
 dependencies:
 name: base
@@ -44,7 +44,7 @@ dependencies:
   - pip:
       - django==2.2.2
       - flake8
-      # Django Rest Framework packages
+      ##### * Django Rest Framework packages *
       - djangorestframework
       - markdown       # Markdown support for the browsable API.
       - django-filter  # Filtering support
@@ -55,8 +55,8 @@ dependencies:
 
 
 ### 4.2 Create Dockerfile
-# Go to docker hub and find the miniconda3 image
-# Create a Dockerfile -->
+##### Go to docker hub and find the miniconda3 image
+##### Create a Dockerfile -->
 FROM continuumio/miniconda3:4.5.12
 
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
@@ -100,8 +100,10 @@ volumes:
 ### 6. Build the image -->
 docker build -t <image name>:latest .
 
-# to remove an image --> docker rm <image name>
-or --> docker rmi -f <image name>
+##### to remove an image -->
+docker rm <image name>
+##### or -->
+docker rmi -f <image name>
 
 
 ### 7. Run the image to spin-up a new container -->
@@ -128,27 +130,27 @@ DATABASES = {
 }
 
 
-# Reset or start a new database
-# to create the database -->
+##### Reset or start a new database
+##### to create the database -->
 python manage.py migrate
 python manage.py makemigrations
 python manage.py migrate
 
-# create superuser to access admin -->
+#####create superuser to access admin -->
 python manage.py createsuperuser
 
-# to run the server -->
+#####to run the server -->
 python manage.py runserver 0.0.0.0:8000
 
-# check the server visit -->
+##### check the server visit -->
  http://localhost:8000
  
-# check the admin page -->
+#####check the admin page -->
 http://localhost:8000/admin
 
 
 ### 10. Connect to postgres from Pycharm
-# View - Tools window - Databases - Postgres -->
+#####View - Tools window - Databases - Postgres -->
 localhost: postgres
 user: postgres
 password: postgres
@@ -167,7 +169,7 @@ INSTALLED_APPS = [
 
 
 ### 13. Create a model at <app name> / models -->
-# example:
+##### example:
 class Post(models.Model):
     title = models.CharField(max_length=200)
     author = models.ForeignKey(
@@ -186,7 +188,7 @@ class Post(models.Model):
 python manage.py makemigrations
 python manage.py migrate
 
-# to list migrations -->
+##### to list migrations -->
 python manage.py <app name> showmigrations
 
 
@@ -196,7 +198,7 @@ ex: blog_post
 
 
 ### 16. If you want to give access to the admin,
-# Go to app directory / admin.py -->
+##### Go to app directory / admin.py -->
 admin.site.register(<model class name>)
 
 
@@ -224,10 +226,10 @@ urlpatterns = [
 ### 1. Install packages if not already in the requirements.yml -->
 pip install djangorestframework
 
-# Markdown support for the browsable API
+##### Markdown support for the browsable API
 pip install markdown  
 
-# Filtering support     
+##### Filtering support     
 pip install django-filter  
 
 
@@ -238,18 +240,16 @@ INSTALLED_APPS = (
 )
 
 
-## 3. If you're intending to use the browsable API you'll probably also want to add REST framework's login
-### and logout views.
-### Add the following to your root urls.py file -->
+## 3. If you're intending to use the browsable API you'll probably also want to add REST framework's login and logout views.
+##### Add the following to your root urls.py file -->
 urlpatterns = [
     ...
     path('api-auth/', include('rest_framework.urls')),
 ]
 
 
-### 4. Any global settings for a REST framework API are kept in a single
-### configuration dictionary named REST_FRAMEWORK.
-### Add the following to the settings.py module -->
+### 4. Any global settings for a REST framework API are kept in a single configuration dictionary named REST_FRAMEWORK.
+##### Add the following to the settings.py module -->
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
@@ -260,7 +260,7 @@ REST_FRAMEWORK = {
 
 
 ### 5. Create a serializers.py in <app name> directory -->
-# blog/serializers.py -->
+##### blog/serializers.py -->
 from rest_framework import serializers
 from .models import <Model class>
 class <model class>Serializer(serializers.ModelSerializer):
@@ -279,13 +279,12 @@ class <model class>Serializer(serializers.ModelSerializer):
 app/project/urls.py
 
 
-### Tips
-
-# HOW TO CHANGE THE TIMEZONE ?? -->
+### TIPS
+##### HOW TO CHANGE THE TIMEZONE ?? -->
 use local time from python library
 
-# WHAT IS THE DIFFERENCE BETWEEN VIEW AND GENERIC VIEW?? -->
+##### WHAT IS THE DIFFERENCE BETWEEN VIEW AND GENERIC VIEW?? -->
 There are different classes, Generic has more packages
 
-# WHAT IS: from django.contrib.auth import get_user_model ?? -->
+##### WHAT IS: from django.contrib.auth import get_user_model ?? -->
 You import Django's User Table (<auth_user> in postgres)
