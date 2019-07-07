@@ -15,7 +15,7 @@ RestAPI for a Social Media website using Django's Rest Framework and Docker
 - GET: lists all the posts of the logged in user’s friends in chronological order 
 ```/api/feed/friends/ ```
 
-### 2.Posts
+### 2. Posts
 - POST: user can make a new post by sending post data 
 ```/api/posts/new-post/ ```
 - GET: get a specific post by ID and display all the information about that post 
