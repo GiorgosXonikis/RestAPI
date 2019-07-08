@@ -93,27 +93,6 @@ class PostLikeAPIView(APIView):
         return Response({"Status 204": "Post like deleted succesfully"}, status=status.HTTP_204_NO_CONTENT)
 
 
-# class PostsLikedAPIView(generics.ListAPIView):
-#     """
-#     Class to get all the Posts that the user Liked
-#     """
-#
-#     serializer_class = PostSerializer
-#
-#     def get_queryset(self):
-#         # get the liked posts of the loged-in user --> request.user
-#         liked_posts = Reaction.objects.filter(Q(user_reacted=self.request.user) & Q(status=1))
-#         # serialize the data
-#         serializer = ReactionSerializer(liked_posts, many=True)
-#         # create a list with the liked posts id's
-#         posts_id = [post['posts'] for post in serializer.data]
-#
-#         # query --> SELECT * FROM post WHERE author IN sender_id
-#         queryset = Post.objects.filter(Q(id__in=posts_id))
-#
-#         return queryset
-
-
 class PostsLikedAPIView(generics.ListAPIView):
     """
     Class to get all the Posts that the user Liked
