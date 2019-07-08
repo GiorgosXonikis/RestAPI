@@ -1,6 +1,5 @@
 from app_api.permissions import IsOwnerOrReadOnly
 from rest_framework.permissions import IsAuthenticated
-from django.core.validators import ValidationError
 
 from rest_framework.views import APIView
 from rest_framework import generics, status
