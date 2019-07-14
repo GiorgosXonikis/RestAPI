@@ -4,7 +4,7 @@ dependencies:
   - psycopg2=2.7.4
   - pip:
     - coverage==4.3.4
-    - django==2.0.3
+    - django==2.2.3
     - djangorestframework==3.7.7
     - coreapi==2.3.3
     - django-cors-headers
