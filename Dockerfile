@@ -1,4 +1,4 @@
-FROM continuumio/miniconda3:4.5.12
+FROM continuumio/miniconda:latest
 
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
 
@@ -9,7 +9,7 @@ RUN conda env update -f /app/requirements.yml
 
 COPY ./app /app
 
-COPY ./scripts/* /scripts/
+COPY ./scripts /scripts
 RUN chmod +x /scripts/*
 
 WORKDIR /app

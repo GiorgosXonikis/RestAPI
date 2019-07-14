@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+from datetime import timedelta
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -39,21 +40,13 @@ INSTALLED_APPS = [
     'django.contrib.sites',
 
     'rest_framework',
-    'rest_framework.authtoken',
-
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
-
-    'rest_auth',
-    #'rest_auth.registration',
 
     'posts',
     'users',
     'app_api',
     'me',
     'registration',
-
+    'authentication',
 ]
 
 MIDDLEWARE = [
@@ -143,14 +136,28 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = 'uploads'
 
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.TokenAuthentication',
-    )
-}
-
 SITE_ID = 1
 
-ACCOUNT_EMAIL_VERIFICATION = "none"
-ACCOUNT_EMAIL_REQUIRED = True
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+}
+
+# Configuration for using simplejwt library
+SIMPLE_JWT = {
+   "ACCESS_TOKEN_LIFETIME": timedelta(days=5),
+   "REFRESH_TOKEN_LIFETIME": timedelta(days=5),
+}
+
+# Email settings
+BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'students@propulsionacademy.com'
+EMAIL_HOST_PASSWORD = 'VNZ4NVUTa8LM{i38{zCGjCG6ewjaNnR8Njhph@Rf'
+DEFAULT_FROM_EMAIL = 'students@propulsionacademy.com'
