@@ -1,5 +1,5 @@
 # RestAPI
-RestAPI for a Social Media website using Django's Rest Framework and Docker
+RestAPI for a Social Media website using Django's Rest Framework, PostgreSQL and Docker
 
 ## The app has the following Endpoints
 
